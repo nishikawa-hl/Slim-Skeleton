@@ -12,7 +12,6 @@ class UserController extends Controller
         try {
 
             $users = ( new \App\Model\User() )->getAll();
-            throw new Exception();
 
         } catch ( \App\Exception\BadRequestException $e ) {
 
