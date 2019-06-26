@@ -19,4 +19,25 @@ return function (App $app) {
         $logger->pushHandler(new \Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
         return $logger;
     };
+
+    // Twig View
+    $container[ 'view' ] = function ( $c ) {
+
+        $settings = $c->get( 'settings' )[ 'view' ];
+        $view = new \Slim\Views\Twig( $settings[ 'template_path' ], $settings[ 'twig' ] );
+
+        foreach ( $settings[ 'extension' ] as $extension ) {
+
+            $view->addExtension( new $extension );
+
+        }
+
+        $router = $c->get( 'router' );
+        $uri = \Slim\Http\Uri::createFromEnvironment( new \Slim\Http\Environment( $_SERVER ) );
+        $view->addExtension( new \Slim\Views\TwigExtension( $router, $uri ) );
+
+        return $view;
+
+    };
+    
 };
